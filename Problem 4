@@ -1,0 +1,39 @@
+h = input('\nInitial height of the projectile above ground (in meters): ');
+v = input('\nMagnitude of the velocity (in m/s): ');
+theta = input('\nAngle in degrees at which the projectile is fired (w/ respect to +x-axis): ');
+ax = input('\nX-component of acceleration (m/s^2): ');
+ay = input('\nY-component of acceleration (m/s^2): ');
+
+if ay == 0
+    disp ('\nERROR!Vertical acceleration cannot be equal to zero');
+else
+    vox = v*cosd(theta);
+    voy = v*sind(theta);
+    V = sqrt(vox^2 + voy^2);
+    t = max(roots([(ay/2),voy,h]));
+    a = 0:0.01:t+1;
+    b = zeros(1,length(a)+1);
+    c = zeros(1,length(a)+1);
+    t = 0.01;
+    b(1) = 0;
+    c(1) = h;
+end
+   
+for i = 1: length(a)-1
+    tx = ((ax*(t^2))/2)+(vox*t);
+    ty = ((ay*(t^2))/2)+(voy*t);
+    b(i+1) = tx;
+    c(i+1) = ty; 
+    t = t+0.01;
+end
+
+b(length(a)+1) = (ax/2)*t^2+vox*0.01;
+c(length(a)+1) = 0;
+xlim([0 max(b)+1])
+ylim([0 max(c)+1])
+plot(b,c,'.r')
+grid on
+xlabel('Range')
+ylabel('Height')
+legend('Ideal','Real')
+title('Projectile Motion')
